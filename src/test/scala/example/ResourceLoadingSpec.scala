@@ -41,6 +41,14 @@ class ResourceLoadingSpec extends FreeSpec with Matchers {
       text shouldBe "file1 contents (test)"
     }
 
+    "Listing files using Paths.get(resource.toUri()).toFile()" in {
+      val resource = getClass.getResource("/subdir")
+      val path     = Paths.get(resource.toURI)
+      val files    = path.toFile().listFiles.toList
+
+      files.map(_.getName) should contain theSameElementsAs List("subdirFile1", "subdirFile2")
+    }
+
     "using new File and 'user.dir' system property" in {
       val userDir = System.getProperty("user.dir")
       println(s"userDir is $userDir")

@@ -1,5 +1,7 @@
 package example
 
+import java.io.File
+
 import org.scalatest._
 
 import scala.io.Source
@@ -28,6 +30,15 @@ class ResourceLoadingSpec extends FreeSpec with Matchers {
       "getClass.getResourceAsStream(...)" in {
         getResourceAsStream("/file1")
       }
+    }
+
+    "using new File and 'user.dir' system property" in {
+      val userDir = System.getProperty("user.dir")
+      println(s"userDir is $userDir")
+      val file1 = new File(userDir + "/src/main/resources/file1")
+      val text  = Source.fromFile(file1).mkString
+
+      text shouldBe "file1 contents"
     }
 
     def getResource(s: String) = {
